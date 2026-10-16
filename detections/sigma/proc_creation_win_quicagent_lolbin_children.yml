@@ -1,0 +1,33 @@
+title: Windowsupdate.exe in LOCALAPPDATA Spawns a Shell
+id: b14d3e4b-72e8-46ff-9bbb-874ff87b1696
+status: experimental
+description: |
+    QUICAgent's 'shell' task runs commands through cmd.exe / powershell.exe as children of the implant process.
+    Evidence tag: NOVEL (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.execution
+    - attack.t1059.003
+    - attack.t1059.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_parent:
+        - ParentImage|endswith: '\AppData\Local\Windowsupdate.exe'
+        - ParentImage|contains: '\Users\Public\Downloads\SystemPublicCache\'
+    selection_child:
+        Image|endswith:
+            - '\cmd.exe'
+            - '\powershell.exe'
+            - '\pwsh.exe'
+            - '\attrib.exe'
+            - '\tasklist.exe'
+    condition: all of selection_*
+falsepositives:
+    - None known
+level: critical

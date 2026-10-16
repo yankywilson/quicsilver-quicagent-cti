@@ -1,0 +1,256 @@
+// =====================================================================================================
+//  Operation QUICSILVER / QUICAgent - Microsoft Defender XDR advanced hunting pack
+//  ANCHOR | TLP:CLEAR | 2026-10-15 | https://github.com/yankywilson/quicsilver-quicagent-cti
+//
+//  Tables: DeviceProcessEvents, DeviceFileEvents, DeviceNetworkEvents, DeviceEvents (Defender XDR).
+//  Each block is a standalone query: copy ONE block (from its header to the next header) and run it.
+//  Syntax and column names were validated offline with the Kusto.Language parser against the published
+//  table schemas (tests/validate_kql.js).
+//
+//  LOOKBACK: every query uses ago(30d). Native Defender XDR advanced hunting only returns 30 days of data.
+//  The operation ran December 2025 -> August 2026, so a full retro-hunt needs the tables retained longer in
+//  Microsoft Sentinel (analytics tier) or another SIEM - there, change 30d to 330d. Q08 and Q09 look for
+//  infrastructure and files that are older than 30 days: on native retention they will usually return nothing.
+// =====================================================================================================
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q01  ftp.exe running a local command script (-s)  - the QUICSILVER / GriefLure LNK loader
+//      The LNK runs  %SystemRoot%\System32\ftp.exe -s"":_/_/j/_/_/_/_/_/_  from a mounted VHD.
+//      ftp.exe with -s is rare; ExactTemplate = true is the QUICSILVER folder nest.
+// ---------------------------------------------------------------------------------------------------
+DeviceProcessEvents
+| where Timestamp > ago(30d)
+| where FileName =~ "ftp.exe" or ProcessVersionInfoOriginalFileName =~ "ftp.exe"
+| where ProcessCommandLine matches regex @"(?i)\s[-/]s(""""|:)"
+| extend ExactTemplate = ProcessCommandLine has "_/_/j/" or ProcessCommandLine has @"_\_\j\"
+| extend FromShell = InitiatingProcessFileName =~ "explorer.exe"
+| project Timestamp, DeviceName, AccountName, ProcessCommandLine, ExactTemplate, FromShell,
+          InitiatingProcessFileName, InitiatingProcessCommandLine, FolderPath
+| order by Timestamp desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q02  ftp.exe -> cmd.exe joining two .doc files into an EXE  (split-payload rebuild)
+//      !call copy /Y /b _\_\j\_\_\_\_\_\_rels\header.doc+...\body.doc "%LOCALAPPDATA%\Windowsupdate.exe"
+// ---------------------------------------------------------------------------------------------------
+DeviceProcessEvents
+| where Timestamp > ago(30d)
+| where FileName =~ "cmd.exe"
+| where ProcessCommandLine has "copy" and ProcessCommandLine has "/b" and ProcessCommandLine has ".doc+"
+        and ProcessCommandLine has ".exe"
+| extend ParentIsFtp = InitiatingProcessFileName =~ "ftp.exe"
+| project Timestamp, DeviceName, AccountName, ProcessCommandLine, ParentIsFtp, InitiatingProcessCommandLine
+| order by Timestamp desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q03  Windowsupdate.exe in the root of %LOCALAPPDATA%  (QUICAgent drop + start)
+//      Windows Update never puts an executable there. SHA1s of the known builds are in Q09.
+// ---------------------------------------------------------------------------------------------------
+union
+  (DeviceFileEvents
+   | where Timestamp > ago(30d)
+   | where FileName =~ "Windowsupdate.exe" and FolderPath matches regex @"(?i)\\Users\\[^\\]+\\AppData\\Local\\Windowsupdate\.exe$"
+   | extend Evidence = "file written"),
+  (DeviceProcessEvents
+   | where Timestamp > ago(30d)
+   | where FileName =~ "Windowsupdate.exe" and FolderPath matches regex @"(?i)\\Users\\[^\\]+\\AppData\\Local\\Windowsupdate\.exe$"
+   | extend Evidence = "process started")
+| project Timestamp, DeviceName, Evidence, FolderPath, SHA1, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by Timestamp desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q04  QUICAgent persistence (June / August builds)
+//      create_lnk_*.ps1 in %TEMP% -> PowerShell WScript.Shell -> Startup\SystemIn.lnk
+//      plus launchViaCOM: PowerShell Shell.Application ShellExecute('<path>')
+// ---------------------------------------------------------------------------------------------------
+union
+  (DeviceFileEvents
+   | where Timestamp > ago(30d)
+   | where (FileName =~ "SystemIn.lnk" and FolderPath has @"\Start Menu\Programs\Startup\")
+        or (FileName startswith "create_lnk_" and FileName endswith ".ps1")
+   | extend Evidence = strcat("file: ", FileName)),
+  (DeviceProcessEvents
+   | where Timestamp > ago(30d)
+   | where FileName in~ ("powershell.exe", "pwsh.exe")
+   | where (ProcessCommandLine has "create_lnk_")
+        or (ProcessCommandLine has "Shell.Application" and ProcessCommandLine has "ShellExecute(")
+   | extend Evidence = "powershell")
+| project Timestamp, DeviceName, Evidence, FolderPath, ProcessCommandLine, InitiatingProcessFileName,
+          InitiatingProcessFolderPath
+| order by Timestamp desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q05  December 2025 build: EDR check, self-install, hide, self-delete
+//      tasklist /FO CSV /NH (x2) -> copy to C:\Users\Public\Downloads\SystemPublicCache\ -> attrib +h +s
+//      -> relaunch with the original path -> cmd /c ping 127.0.0.1 -n 3 >nul & del /f /q "<original>"
+//      The copy step is skipped when bdagent.exe or sentinelagent.exe is running.
+// ---------------------------------------------------------------------------------------------------
+union
+  (DeviceFileEvents
+   | where Timestamp > ago(30d)
+   | where FolderPath has @"\Users\Public\Downloads\SystemPublicCache\"
+   | extend Evidence = "file in SystemPublicCache"),
+  (DeviceProcessEvents
+   | where Timestamp > ago(30d)
+   | where (FileName =~ "attrib.exe" and ProcessCommandLine has @"\Users\Public\Downloads\SystemPublicCache\")
+        or (InitiatingProcessFolderPath has @"\Users\Public\Downloads\SystemPublicCache\")
+        or (FileName =~ "cmd.exe" and ProcessCommandLine has "ping 127.0.0.1 -n 3" and ProcessCommandLine has "del /f /q")
+   | extend Evidence = strcat("process: ", FileName))
+| project Timestamp, DeviceName, Evidence, FolderPath, ProcessCommandLine, InitiatingProcessFileName,
+          InitiatingProcessFolderPath, InitiatingProcessCommandLine
+| order by Timestamp desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q06  April 2026 build (HolidayNotice.pdf.exe, rat/agent lineage): C:\Users\Public\original_path.txt,
+//      plus its clean-up of *.hta files in the user's Downloads folder (likely the delivery stage).
+//      It also opens an embedded decoy PDF and checks for SentinelAgent.exe, ptsessionagent.exe, bdagent.exe.
+// ---------------------------------------------------------------------------------------------------
+let hta_ok = dynamic(["explorer.exe", "mshta.exe", "msedge.exe", "chrome.exe", "firefox.exe", "MsMpEng.exe"]);
+union
+  (DeviceFileEvents
+   | where Timestamp > ago(30d)
+   | where FileName =~ "original_path.txt" and FolderPath matches regex @"(?i)^C:\\Users\\Public\\original_path\.txt$"
+   | extend Evidence = "original_path.txt"),
+  (DeviceFileEvents
+   | where Timestamp > ago(30d)
+   | where ActionType == "FileDeleted" and FileName endswith ".hta" and FolderPath has @"\Downloads\"
+   | where not(InitiatingProcessFileName in~ (hta_ok))
+   | extend Evidence = "hta deleted from Downloads")
+| project Timestamp, DeviceName, Evidence, ActionType, FolderPath, InitiatingProcessFileName, InitiatingProcessFolderPath,
+          InitiatingProcessSHA1, InitiatingProcessCommandLine
+| order by Timestamp desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q07  QUIC (UDP/443) from a binary in a user-writable folder  (generic QUICAgent-class hunt)
+//      Browsers and known QUIC clients are excluded. Expect some noise from portable apps: baseline first.
+//      QUICAgent pads each Initial to 1,252 bytes of UDP payload (1,280-byte IPv4 packets) - check the
+//      packet sizes in a PCAP when you have one.
+// ---------------------------------------------------------------------------------------------------
+let quic_ok = dynamic(["chrome.exe", "msedge.exe", "firefox.exe", "brave.exe", "opera.exe", "vivaldi.exe",
+                       "msedgewebview2.exe", "teams.exe", "ms-teams.exe", "zoom.exe", "discord.exe", "steam.exe"]);
+DeviceNetworkEvents
+| where Timestamp > ago(30d)
+| where Protocol =~ "udp" and RemotePort == 443 and RemoteIPType == "Public"
+| where InitiatingProcessFolderPath has_any (@"\AppData\Local\", @"\AppData\Roaming\", @"\Users\Public\", @"\ProgramData\", @"\Temp\")
+| where not(InitiatingProcessFileName in~ (quic_ok))
+| summarize Flows = count(), FirstSeen = min(Timestamp), LastSeen = max(Timestamp), RemoteIPs = make_set(RemoteIP, 20)
+          by DeviceName, InitiatingProcessFileName, InitiatingProcessFolderPath, InitiatingProcessSHA1
+| order by Flows desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q08  Network indicators with their date windows (many are now someone else's)
+//      www.maui-cocktailbar.com is actor-held only 2025-12-22 .. 2026-06-06; 104.64.211.22 only 2026-07-07 .. 2026-08-11.
+//      All windows are older than 30 days: run on Sentinel-retained tables with ago(330d) (see header).
+// ---------------------------------------------------------------------------------------------------
+let hosts = dynamic(["appupdate.0cmds20cj2cdf8.workers.dev", "regupdate.eamakfu49dc28wa.workers.dev",
+                     "register.mediumser.com", "mediumser.com"]);
+let windows = datatable(Indicator:string, From:datetime, To:datetime) [
+    "www.maui-cocktailbar.com", datetime(2025-12-22), datetime(2026-06-07),
+    "38.60.244.92",             datetime(2025-12-01), datetime(2026-02-07),
+    "38.60.244.141",            datetime(2026-02-01), datetime(2026-07-07),
+    "104.64.211.22",            datetime(2026-07-07), datetime(2026-08-12),
+    "130.94.100.181",           datetime(2026-08-12), datetime(2026-08-19)];
+let net = DeviceNetworkEvents
+    | where Timestamp > ago(30d)
+    | extend Indicator = iff(isnotempty(RemoteUrl), tolower(RemoteUrl), RemoteIP)
+    | project Timestamp, DeviceName, Indicator, RemoteIP, RemotePort, Protocol, InitiatingProcessFileName,
+              InitiatingProcessFolderPath;
+union
+  (net | where Indicator has_any (hosts) | extend Window = "always"),
+  (net | join kind=inner windows on Indicator | where Timestamp between (From .. To) | extend Window = "in window"
+       | project-away Indicator1, From, To),
+  (net | extend Indicator = RemoteIP | join kind=inner windows on Indicator | where Timestamp between (From .. To)
+       | extend Window = "in window (IP)" | project-away Indicator1, From, To),
+  (DeviceEvents
+   | where Timestamp > ago(30d) and ActionType == "DnsQueryResponse"
+   | extend Q = tolower(tostring(AdditionalFields.DnsQueryString))
+   | where Q has_any (hosts) or Q == "www.maui-cocktailbar.com"
+   | project Timestamp, DeviceName, Indicator = Q, InitiatingProcessFileName, InitiatingProcessFolderPath,
+             Window = "dns")
+| order by Timestamp desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q09  Known files by SHA1 and SHA256 (implant builds, LNK, ftp script, payload halves, VHD)
+//      For a retro-hunt run on Sentinel-retained tables with ago(330d) (see header).
+//      2655c016 (December) is a memory image: a disk copy will hash differently - also run the YARA pack.
+// ---------------------------------------------------------------------------------------------------
+let sha1s = dynamic(["12a0fac63096362d941313079c79dda3681716e6", "c06b90b06caf4e2e8d9eeef84c34ca84a2f40fa7",
+                     "7a6ad756256f1226e96eac775c56bcd6a37f6378", "596e22eb9b8e29f7da1ae46652847e9dd849625e"]);
+let sha256s = dynamic(["2655c0161601b009d2022e02e2c1860a884638c91159e9c9f99fc472445bfc63",
+                       "c4b4647795567ab15528edd1ab1bf37fb50e21b442e59a653051061973e87c02",
+                       "cd147efe37003399e174951927e5fe727a4481756b116f0204a14a64cc62b059",
+                       "c15aead19e0d6e8ed51de79a858d7ef6b5ede226c7db79e7008a23b3445c164d",
+                       "0803521a7e9081f46f8f9f61d72371ecc1f49657f10202fffa9a33f581d8bb39",
+                       "836fa2c799b0b7c2ab683055d880674a2cfe95dc6e47b0650f9f8e0dcb43f858",
+                       "5328c3c3e8cf6bc498c3557cd57a0f98177da8f70dfe3accf9c0f73490f70fd1",
+                       "4a1a1b1455c3ea91a3d9203ebff025553227302cede6077e821d303655e2c9f2",
+                       "aeff39943e254c34187e4a60be3d09d49687439e709eeb4be2b1984310d8ba5c",
+                       "26f735cbbb1257be94e6d01656a35bf66a8ae9c34868548d69ec5cb588f9f916",
+                       "daeac66441b88ba22806f6617058a2dbf1ea0ddcc6c94f291542ea853ac6f9d3"]);
+union
+  (DeviceFileEvents | where Timestamp > ago(30d) | where SHA1 in (sha1s) or SHA256 in (sha256s)
+   | extend Evidence = "file"),
+  (DeviceProcessEvents | where Timestamp > ago(30d) | where SHA1 in (sha1s) or SHA256 in (sha256s)
+   | extend Evidence = "process")
+| project Timestamp, DeviceName, Evidence, FileName, FolderPath, SHA1, SHA256, InitiatingProcessFileName
+| order by Timestamp desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q10  VHD / VHDX opened, then ftp.exe within 30 minutes on the same device  (delivery chain)
+//      The lure arrives as a .vhd (sometimes renamed .jpg); Windows mounts it on double-click.
+// ---------------------------------------------------------------------------------------------------
+let vhd = DeviceFileEvents
+    | where Timestamp > ago(30d)
+    | where FileName endswith ".vhd" or FileName endswith ".vhdx" or FileName endswith ".jpg"
+    | where FolderPath has_any (@"\Downloads\", @"\AppData\Local\Temp\", @"\Content.Outlook\", @"\INetCache\")
+    | where FileSize > 1000000
+    | project VhdTime = Timestamp, DeviceId, DeviceName, VhdPath = FolderPath, VhdSize = FileSize;
+DeviceProcessEvents
+| where Timestamp > ago(30d)
+| where FileName =~ "ftp.exe" and ProcessCommandLine matches regex @"(?i)\s[-/]s"
+| join kind=inner vhd on DeviceId
+| where Timestamp between (VhdTime .. (VhdTime + 30m))
+| project VhdTime, Timestamp, DeviceName, VhdPath, VhdSize, ProcessCommandLine, InitiatingProcessFileName
+| order by Timestamp desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q11  Dead-drop then QUIC: a non-browser process calls *.workers.dev over TCP/443, then sends UDP/443
+//      to a non-Cloudflare address within 5 minutes  (June/August resolver pattern, any new Worker)
+// ---------------------------------------------------------------------------------------------------
+let browsers = dynamic(["chrome.exe", "msedge.exe", "firefox.exe", "brave.exe", "opera.exe", "msedgewebview2.exe"]);
+let worker = DeviceNetworkEvents
+    | where Timestamp > ago(30d)
+    | where RemoteUrl endswith ".workers.dev" and RemotePort == 443
+    | where not(InitiatingProcessFileName in~ (browsers))
+    | project WorkerTime = Timestamp, DeviceId, DeviceName, InitiatingProcessUniqueId, InitiatingProcessFileName,
+              InitiatingProcessFolderPath, WorkerHost = RemoteUrl;
+DeviceNetworkEvents
+| where Timestamp > ago(30d)
+| where Protocol =~ "udp" and RemotePort == 443 and RemoteIPType == "Public"
+| where not(ipv4_is_in_any_range(RemoteIP, "104.16.0.0/13", "172.64.0.0/13", "188.114.96.0/20", "162.158.0.0/15"))
+| join kind=inner worker on DeviceId, InitiatingProcessUniqueId
+| where Timestamp between (WorkerTime .. (WorkerTime + 5m))
+| summarize QuicFlows = count(), QuicIPs = make_set(RemoteIP, 10), FirstQuic = min(Timestamp)
+          by DeviceName, InitiatingProcessFileName, InitiatingProcessFolderPath, WorkerHost, WorkerTime
+| order by WorkerTime desc
+
+
+// ---------------------------------------------------------------------------------------------------
+// Q12  Child processes of a QUICAgent install path  (operator 'shell' tasks, attrib, tasklist)
+// ---------------------------------------------------------------------------------------------------
+DeviceProcessEvents
+| where Timestamp > ago(30d)
+| where InitiatingProcessFolderPath matches regex @"(?i)\\AppData\\Local\\Windowsupdate\.exe$"
+     or InitiatingProcessFolderPath has @"\Users\Public\Downloads\SystemPublicCache\"
+| project Timestamp, DeviceName, AccountName, InitiatingProcessFolderPath, FileName, ProcessCommandLine
+| order by Timestamp desc

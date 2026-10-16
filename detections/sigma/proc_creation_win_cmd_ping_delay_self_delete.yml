@@ -1,0 +1,27 @@
+title: CMD Ping Delay Then Force-Delete - Self-Deletion
+id: e79b1aee-777b-4467-a503-11e6ff078291
+status: experimental
+description: |
+    December QUICAgent build removes its original copy with 'cmd.exe /c ping 127.0.0.1 -n 3 >nul & del /f /q "<path>"'. Generic self-delete pattern also used by other malware.
+    Evidence tag: NOVEL (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.defense-evasion
+    - attack.t1070.004
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith: '\cmd.exe'
+        CommandLine|contains|all:
+            - 'ping 127.0.0.1 -n '
+            - 'del /f /q'
+    condition: selection
+falsepositives:
+    - Uninstallers that delete themselves
+level: medium

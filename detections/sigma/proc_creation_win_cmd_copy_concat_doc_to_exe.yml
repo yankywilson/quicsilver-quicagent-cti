@@ -1,0 +1,31 @@
+title: CMD Binary Copy Joins Two .doc Files Into an EXE
+id: 067d2dca-2e29-44dc-a98e-3a857934acf9
+status: experimental
+description: |
+    Detects 'copy /b a.doc+b.doc x.exe' - the QUICSILVER split-payload rebuild (header.doc + body.doc -> %LOCALAPPDATA%\Windowsupdate.exe).
+    Evidence tag: CORROBORATED (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.defense-evasion
+    - attack.t1027
+    - attack.t1140
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        Image|endswith: '\cmd.exe'
+    selection_cli:
+        CommandLine|contains|all:
+            - 'copy '
+            - '/b'
+            - '.doc+'
+            - '.exe'
+    condition: all of selection_*
+falsepositives:
+    - None known
+level: high

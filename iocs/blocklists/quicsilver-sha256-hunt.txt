@@ -1,0 +1,7 @@
+# SHA-256 to HUNT, not block: decoy documents (real-looking government files), the deleted early payload half, an unconfirmed lead
+# Operation QUICSILVER / QUICAgent - TLP:CLEAR - 2026-10-15 - https://github.com/yankywilson/quicsilver-quicagent-cti
+575305cdaeb1d2187ca6d5ebe32f4c3e3fb53f5ccbe1c0cc257a7f71d84e6f35
+7b95b2170a3e943f6a96e78f69d32f4f6245fe0084dd4d14303061abd1ec51de
+95b5524bd3e5b72f5f6c9a36a0d73b6467aa90a26cb9a8be1d036ecdc7993b76
+b1fd6a1cfa78429b3bf5adf64f69d35998f54577df486b2a1acdf854d11a12a6
+bf8afbd1c2074c7cd6ff8b86dbe67a57ca5594817e46b24e226b71c4edde7697

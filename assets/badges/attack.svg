@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="142" height="20" role="img" aria-label="MITRE ATT&amp;CK: v19.2">
+  <title>MITRE ATT&amp;CK: v19.2</title>
+  <clipPath id="c"><rect width="142" height="20" rx="3"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect width="97" height="20" fill="#1f2630"/>
+    <rect x="97" width="45" height="20" fill="#ff4d6d"/>
+  </g>
+  <g font-family="Verdana,Geneva,'DejaVu Sans',sans-serif" font-size="11" text-anchor="middle">
+    <text x="48.5" y="14" fill="#e6edf3" textLength="83" lengthAdjust="spacingAndGlyphs">MITRE ATT&amp;CK</text>
+    <text x="119.5" y="14" fill="#0b1020" textLength="31" lengthAdjust="spacingAndGlyphs">v19.2</text>
+  </g>
+</svg>

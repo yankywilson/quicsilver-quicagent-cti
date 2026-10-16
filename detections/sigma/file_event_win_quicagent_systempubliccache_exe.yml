@@ -1,0 +1,27 @@
+title: QUICAgent December Build Installs Into Public Downloads SystemPublicCache
+id: 3e52d888-f37f-408e-98dc-5dc1c0443e57
+status: experimental
+description: |
+    The December 2025 QUICAgent build copies itself to C:\Users\Public\Downloads\SystemPublicCache\ (unless bdagent.exe or sentinelagent.exe is running), hides it with attrib +h +s and relaunches.
+    Evidence tag: NOVEL (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.persistence
+    - attack.defense-evasion
+    - attack.t1564.001
+    - attack.t1036.005
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection:
+        TargetFilename|contains: '\Users\Public\Downloads\SystemPublicCache\'
+        TargetFilename|endswith: '.exe'
+    condition: selection
+falsepositives:
+    - None known
+level: high

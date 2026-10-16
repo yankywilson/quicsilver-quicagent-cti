@@ -1,0 +1,27 @@
+title: Attrib Hides an Executable in Public Downloads SystemPublicCache
+id: 942e5676-c1f5-4c4f-afbb-b8b9eba5188a
+status: experimental
+description: |
+    December QUICAgent build: 'attrib +h +s C:\Users\Public\Downloads\SystemPublicCache\<name>.exe' followed by 'attrib +h' from the relaunched copy.
+    Evidence tag: NOVEL (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.defense-evasion
+    - attack.t1564.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith: '\attrib.exe'
+        CommandLine|contains|all:
+            - '+h'
+            - '\Users\Public\Downloads\SystemPublicCache\'
+    condition: selection
+falsepositives:
+    - None known
+level: high

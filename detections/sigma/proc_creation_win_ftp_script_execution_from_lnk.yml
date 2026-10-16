@@ -1,0 +1,33 @@
+title: FTP.EXE Runs a Local Command Script (-s) - QUICSILVER/GriefLure LNK Loader
+id: 9b982720-da97-4885-9e01-2950867a850a
+status: experimental
+description: |
+    Detects ftp.exe started with the -s switch, the way QUICSILVER and GriefLure LNK files run a hidden command script from a mounted VHD or extracted archive. ftp.exe -s is rare on modern endpoints.
+    Evidence tag: CORROBORATED (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.defense-evasion
+    - attack.t1202
+    - attack.execution
+    - attack.t1204.002
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Image|endswith: '\ftp.exe'
+        - OriginalFileName: 'ftp.exe'
+    selection_cli:
+        CommandLine|contains:
+            - ' -s:'
+            - ' /s:'
+            - ' -s"":'
+            - ' -s"'
+    condition: all of selection_*
+falsepositives:
+    - Legacy scripted FTP jobs (baseline them; they rarely start from explorer.exe)
+level: high

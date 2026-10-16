@@ -1,0 +1,7 @@
+indicator,type,first_seen,last_seen,why_time_bound
+104.64.211.22,ipv4,2026-07-07,2026-08-11,"now a bystander host - do not block-list or probe"
+38.60.244.141,ipv4,2026-02-07,2026-07-06,"actor left by 2026-07-07"
+38.60.244.92,ipv4,2025-12-26,2025-12-26,"unknown; not seen in OTX/web"
+https://www.maui-cocktailbar.com:443,url,2025-12-26,2026-06-06,"domain no longer actor-held"
+maui-cocktailbar.com,domain,2025-06-06,2026-06-06,"re-registered 2026-09-29 by an unrelated party - not actor"
+www.maui-cocktailbar.com,domain,2025-12-26,2026-06-06,"domain re-registered 2026-09-29 by an unrelated party"

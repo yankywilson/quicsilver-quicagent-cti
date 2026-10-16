@@ -1,0 +1,24 @@
+title: QUICAgent Startup Shortcut SystemIn.lnk
+id: 9f5d0f95-55e1-44dc-a010-5709159797ae
+status: experimental
+description: |
+    QUICAgent (June/August builds) persists through %APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\SystemIn.lnk, created by a temporary create_lnk_*.ps1 script.
+    Evidence tag: CORROBORATED (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.persistence
+    - attack.t1547.001
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection:
+        TargetFilename|endswith: '\Start Menu\Programs\Startup\SystemIn.lnk'
+    condition: selection
+falsepositives:
+    - None known
+level: high

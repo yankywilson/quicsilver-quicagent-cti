@@ -1,0 +1,4 @@
+# Dead-drop resolver URLs (note the correct /vere0zme82cad path)
+# Operation QUICSILVER / QUICAgent - TLP:CLEAR - 2026-10-15 - https://github.com/yankywilson/quicsilver-quicagent-cti
+https://appupdate.0cmds20cj2cdf8.workers.dev/A3cmf0q9ASCion
+https://regupdate.eamakfu49dc28wa.workers.dev/vere0zme82cad

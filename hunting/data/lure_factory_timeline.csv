@@ -1,0 +1,11 @@
+in_fat_ctime,in_clock,out_utc,out_clock,slot,original_name,recycle_name,size,sha256,notes
+2026-01-12T22:15:00,local UTC-8,2026-05-14T01:37:35,UTC-7,payload,header.doc,$RSZLWN9.DOC,652141,b1fd6a1cfa78429b3bf5adf64f69d35998f54577df486b2a1acdf854d11a12a6,likely agent lineage (entry point and .data size match the December build; low confidence)
+2026-01-29T00:49:52,local,2026-02-04T03:26:24,UTC-3,decoy,25-1-2026.pdf,$RC32JRY.PDF,0,,content not recoverable
+2026-02-07T00:22:08,local,2026-03-18T02:06:20,UTC-3,decoy,Unofficial_Translation.pdf,$RZWM7BO.PDF,265,d6efdb4bb57b274b2bd6fb2d3381f37351d4340e43f8d74bf75df8d402a167d6,265-byte stub
+2026-02-07T04:22:08,local,2026-05-14T01:27:12,UTC-3,decoy,5-14-2026.pdf,$RETCMOD.PDF,265,d6efdb4bb57b274b2bd6fb2d3381f37351d4340e43f8d74bf75df8d402a167d6,same stub
+2026-03-20T23:02:12,local,2026-03-25T03:44:06,UTC-3,decoy,Virtual_Training_Programme.pdf,$RCW8PHQ.PDF,127876,ca3d1ac2c5cda317cea112fe4f20495d502570730c4a10324b2a26de30dd36c2,BIMSTEC / MISIS concept note
+2026-05-16T22:26:32,local (clock conflict),2026-05-14T01:48:50,UTC-3,decoy,5-14-2026.pdf,$RW9D1Q6.PDF,54759,99ac1687ec6a0435c36f2094339f6254a5f1664aaf4e950afecd1d742a3995bc,created after deleted -> clocks >= 2 days apart
+2026-05-16T22:26:32,local,2026-06-25T07:19:29,UTC-3,decoy,5-14-2026.pdf,$R4CCXNO.PDF,70213,9cc22ce79a77791a1704fed63e23eb9f3d986ee62971dae77a1ebd0623d7a44b,Inside Story of Trump's Visit to China
+2026-06-25T04:19:30,local UTC-3,2026-06-26T15:43:26,UTC-3,decoy,TrainingAnnouncement.pdf,$R52MR0T.PDF,106591,575305cdaeb1d2187ca6d5ebe32f4c3e3fb53f5ccbe1c0cc257a7f71d84e6f35,Seqrite decoy; in 1 s after previous out
+2026-06-26T12:43:25,local UTC-3,,,decoy (current),ACMECS_Pillar_1.pdf,,4117,95b5524bd3e5b72f5f6c9a36a0d73b6467aa90a26cb9a8be1d036ecdc7993b76,in 1 s before previous out; corrupt PDF (no objects; reuses the 70213-B 5-14-2026.pdf trailer)
+2026-06-25T04:27:42,local clock unknown (FAT mtime; placed on or after),,,payload (current),header.doc + body.doc,,7046656,cd147efe37003399e174951927e5fe727a4481756b116f0204a14a64cc62b059,June build; header.doc carries the deleted file's creation time (file-system tunnelling -> likely replaced within seconds on 14 May); content last modified 25 Jun

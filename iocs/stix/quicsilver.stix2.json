@@ -1,0 +1,1261 @@
+{
+  "type": "bundle",
+  "id": "bundle--615c4d66-5191-5127-b606-a7cd8060dc88",
+  "objects": [
+    {
+      "type": "identity",
+      "spec_version": "2.1",
+      "id": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "name": "ANCHOR - Colonel Yanky Wilson",
+      "identity_class": "individual"
+    },
+    {
+      "type": "campaign",
+      "spec_version": "2.1",
+      "id": "campaign--ef96ae60-0b86-5e8a-9010-dd471f6d6749",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "Operation QUICSILVER",
+      "first_seen": "2025-12-22T00:00:00Z",
+      "last_seen": "2026-08-18T00:00:00Z",
+      "description": "VHD/LNK/ftp.exe-delivered QUICAgent campaign against Myanmar government and diplomatic targets (Seqrite, 2026-08-17). ANCHOR extends the start to December 2025.",
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--2f84e1ec-5127-5079-887b-fed1b725671a",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "QUICAgent",
+      "is_family": true,
+      "malware_types": [
+        "backdoor",
+        "remote-access-trojan"
+      ],
+      "implementation_languages": [
+        "go"
+      ],
+      "architecture_execution_envs": [
+        "x86-64"
+      ],
+      "description": "Go 1.20 backdoor speaking HTTP/3 over QUIC (quic-go v0.40.1) with a pinned private CA. Two code lineages: module 'agent' (Dec 2025, Jun/Aug 2026) and module 'rat/agent' (Apr 2026).",
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--519f7fda-8b2e-5cd8-b467-3abb1b809220",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "uses",
+      "source_ref": "campaign--ef96ae60-0b86-5e8a-9010-dd471f6d6749",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--78819b29-ea8a-5e33-bbf1-d5049aa6b47f",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: 2655c0161601b009d2022e02e2c1860a884638c91159e9c9f99fc472445bfc63",
+      "description": "QUICAgent December build, as a MEMORY IMAGE (mapped and relocated to 0x920000; raw offsets = RVAs) - lineage `agent` (C:/go agent 2/agent/main.go; pins RAT CA; C2 https://www.maui-cocktailbar.com:443). SHA1 12a0fac63096362d941313079c79dda3681716e6; MD5 ef50056bc653b7f4080d19d8937b1394; 7,413,764 B",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = '2655c0161601b009d2022e02e2c1860a884638c91159e9c9f99fc472445bfc63']",
+      "pattern_type": "stix",
+      "valid_from": "2025-12-22T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--c6d4ed6f-492e-5efd-8bef-34440e63517b",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--78819b29-ea8a-5e33-bbf1-d5049aa6b47f",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--bb96bdae-346d-5f4e-abe4-728c40641826",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: c4b4647795567ab15528edd1ab1bf37fb50e21b442e59a653051061973e87c02",
+      "description": "QUICAgent April build HolidayNotice.pdf.exe - lineage `rat/agent` (C:/go agent/agent/main.go; pins RAT-TeamServer; C2 www.maui-cocktailbar.com). SHA1 c06b90b06caf4e2e8d9eeef84c34ca84a2f40fa7; MD5 b9622eb982f7c8b9885c932ca54339a0; 7,295,488 B",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = 'c4b4647795567ab15528edd1ab1bf37fb50e21b442e59a653051061973e87c02']",
+      "pattern_type": "stix",
+      "valid_from": "2026-04-15T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--86c6bf02-d8eb-514b-afae-266c4cb3c0d2",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--bb96bdae-346d-5f4e-abe4-728c40641826",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--c56961a1-d2ba-5f5e-acc0-bcb47ab59192",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: cd147efe37003399e174951927e5fe727a4481756b116f0204a14a64cc62b059",
+      "description": "QUICAgent June build Windowsupdate.exe - lineage `agent` (cgo, -trimpath; pins RAT CA; Worker dead-drop resolver). SHA1 7a6ad756256f1226e96eac775c56bcd6a37f6378; MD5 2a491d3e89169945ba7234ea4a777e95; 7,046,656 B",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = 'cd147efe37003399e174951927e5fe727a4481756b116f0204a14a64cc62b059']",
+      "pattern_type": "stix",
+      "valid_from": "2026-06-01T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--05728710-ff38-518f-8667-2ca56aeebbb1",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--c56961a1-d2ba-5f5e-acc0-bcb47ab59192",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--c854f0bc-ab50-5feb-a2e0-11b87de88855",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: c15aead19e0d6e8ed51de79a858d7ef6b5ede226c7db79e7008a23b3445c164d",
+      "description": "QUICAgent August respin 146846541.exe - identical to the June build except one .reloc slack byte (0x6B8578: 00 -> 90). SHA1 596e22eb9b8e29f7da1ae46652847e9dd849625e; MD5 4379e277b168ccee3923c1b10ba4dcc3",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = 'c15aead19e0d6e8ed51de79a858d7ef6b5ede226c7db79e7008a23b3445c164d']",
+      "pattern_type": "stix",
+      "valid_from": "2026-08-14T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--12876909-191b-5e46-a3e1-94e2ff50b298",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--c854f0bc-ab50-5feb-a2e0-11b87de88855",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--f997515b-4e2f-5978-b825-13108ab400e6",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: 0803521a7e9081f46f8f9f61d72371ecc1f49657f10202fffa9a33f581d8bb39",
+      "description": "ACMECS_Pillar_1.vhd lure container (dynamic VHD, FAT, created 2026-01-13 06:13:38 UTC). SHA1 e49b8037311e1f898de8f0a7621013a99f9b42f9; MD5 7f6ed7ab257d4d642d6b25860f1e2c93; 14,716,928 B",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = '0803521a7e9081f46f8f9f61d72371ecc1f49657f10202fffa9a33f581d8bb39']",
+      "pattern_type": "stix",
+      "valid_from": "2026-07-01T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--dee876a6-a402-5200-a111-18aabe0cc9f3",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--f997515b-4e2f-5978-b825-13108ab400e6",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--adba9091-1f5a-5a3a-89c5-5419739cf542",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: 836fa2c799b0b7c2ab683055d880674a2cfe95dc6e47b0650f9f8e0dcb43f858",
+      "description": "ACMECS_Pillar_1.pdf.lnk -> %SystemRoot%\\System32\\ftp.exe -s\"\":_/_/j/_/_/_/_/_/_ (icon .\\1.pdf). SHA1 3d066feb75ab8b1f68ed1e89ef7c9583abc7b2c3; MD5 dd45d56c026cd2c58cb4237f34ac4307",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = '836fa2c799b0b7c2ab683055d880674a2cfe95dc6e47b0650f9f8e0dcb43f858']",
+      "pattern_type": "stix",
+      "valid_from": "2026-07-01T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--c85522cc-e9c4-57de-914c-45764cbac671",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--adba9091-1f5a-5a3a-89c5-5419739cf542",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--87e32fcb-883d-5c3d-ac6a-2f03bb6ed2db",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: 5328c3c3e8cf6bc498c3557cd57a0f98177da8f70dfe3accf9c0f73490f70fd1",
+      "description": "ftp.exe command script `_` (opens decoy; copy /Y /b header.doc+body.doc %LOCALAPPDATA%\\Windowsupdate.exe; starts it)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = '5328c3c3e8cf6bc498c3557cd57a0f98177da8f70dfe3accf9c0f73490f70fd1']",
+      "pattern_type": "stix",
+      "valid_from": "2026-07-01T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--4d04feca-58e7-5aab-af08-2b1d70f12d35",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--87e32fcb-883d-5c3d-ac6a-2f03bb6ed2db",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--6584973f-c023-5956-ab07-1f869e729837",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: 4a1a1b1455c3ea91a3d9203ebff025553227302cede6077e821d303655e2c9f2",
+      "description": "header.doc - first 3,523,328 B of Windowsupdate.exe (MZ). SHA1 6e66d673306fc57d6479422e1e8cc17c5dbf94e8",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = '4a1a1b1455c3ea91a3d9203ebff025553227302cede6077e821d303655e2c9f2']",
+      "pattern_type": "stix",
+      "valid_from": "2026-06-01T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--b41045f8-9035-59c4-9654-08be89de23d5",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--6584973f-c023-5956-ab07-1f869e729837",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--057df68e-e355-56b2-9f5a-c5d0355b3dcf",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: aeff39943e254c34187e4a60be3d09d49687439e709eeb4be2b1984310d8ba5c",
+      "description": "body.doc - last 3,523,328 B of Windowsupdate.exe. SHA1 00a7d6e48625b9878f43ea0f9bacd57064df890e",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = 'aeff39943e254c34187e4a60be3d09d49687439e709eeb4be2b1984310d8ba5c']",
+      "pattern_type": "stix",
+      "valid_from": "2026-06-01T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--a7f3843b-9926-5e27-bb2a-067ec941e94a",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--057df68e-e355-56b2-9f5a-c5d0355b3dcf",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--b3d231e4-fb67-5b59-8f6b-f2088105cc6b",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: b1fd6a1cfa78429b3bf5adf64f69d35998f54577df486b2a1acdf854d11a12a6",
+      "description": "Deleted earlier header.doc from the VHD Recycle Bin ($RSZLWN9.DOC; deleted 2026-05-14 01:37:35 UTC): first 652,141 B of a 7,007,744-B Go PE. SHA1 73c60765387528885361e2e1295c32bac58d678f",
+      "indicator_types": [
+        "anomalous-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = 'b1fd6a1cfa78429b3bf5adf64f69d35998f54577df486b2a1acdf854d11a12a6']",
+      "pattern_type": "stix",
+      "valid_from": "2026-05-14T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:very likely",
+        "action:hunt"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--6142cdfb-6b5a-5caf-9840-88e5081684fb",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--b3d231e4-fb67-5b59-8f6b-f2088105cc6b",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--8712dcce-4b58-5b1c-8f82-4753781fea60",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: 575305cdaeb1d2187ca6d5ebe32f4c3e3fb53f5ccbe1c0cc257a7f71d84e6f35",
+      "description": "TrainingAnnouncement.pdf decoy (Burmese ITCSD graduation invitation) - found deleted ($R52MR0T.PDF, 2026-06-26 15:43:26 UTC) in the ACMECS VHD",
+      "indicator_types": [
+        "anomalous-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = '575305cdaeb1d2187ca6d5ebe32f4c3e3fb53f5ccbe1c0cc257a7f71d84e6f35']",
+      "pattern_type": "stix",
+      "valid_from": "2026-06-26T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:hunt"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--ae3c836b-ea9f-58b5-9ebc-eb877d31b55c",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--8712dcce-4b58-5b1c-8f82-4753781fea60",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--a4f7de0d-4c54-588e-8b3e-5d9d1ee3673a",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: 95b5524bd3e5b72f5f6c9a36a0d73b6467aa90a26cb9a8be1d036ecdc7993b76",
+      "description": "ACMECS_Pillar_1.pdf decoy (4,117 B) - corrupt: no objects, startxref 69,580 past its end; its last 203 B equal the tail of the 70,213-B 5-14-2026.pdf",
+      "indicator_types": [
+        "anomalous-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = '95b5524bd3e5b72f5f6c9a36a0d73b6467aa90a26cb9a8be1d036ecdc7993b76']",
+      "pattern_type": "stix",
+      "valid_from": "2026-07-01T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:almost certain",
+        "action:hunt"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--f7d12965-784d-51aa-a7d7-b0a84da8a37d",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--a4f7de0d-4c54-588e-8b3e-5d9d1ee3673a",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--0dbab247-350e-54f9-aa9d-c605fbdf5370",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: 7b95b2170a3e943f6a96e78f69d32f4f6245fe0084dd4d14303061abd1ec51de",
+      "description": "April build's embedded decoy PDF (Belgian-Myanmar holiday calendar; embed.FS name sample.pdf), written as <exe name without .exe>.pdf in the executable's own folder and opened with cmd /c (287,438 B; SHA1 7ec92001ab3e2d45e4042124916a5c6e491125c3)",
+      "indicator_types": [
+        "anomalous-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = '7b95b2170a3e943f6a96e78f69d32f4f6245fe0084dd4d14303061abd1ec51de']",
+      "pattern_type": "stix",
+      "valid_from": "2026-04-15T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:almost certain",
+        "action:hunt"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--48f6ecda-6662-5008-8559-d59ab1db232f",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--0dbab247-350e-54f9-aa9d-c605fbdf5370",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--e22e9074-747d-537e-b392-1dd7e467dc15",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: 26f735cbbb1257be94e6d01656a35bf66a8ae9c34868548d69ec5cb588f9f916",
+      "description": "TrainingAnnouncement.jpg (VHD disguised as JPEG)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = '26f735cbbb1257be94e6d01656a35bf66a8ae9c34868548d69ec5cb588f9f916']",
+      "pattern_type": "stix",
+      "valid_from": "2026-06-01T00:00:00Z",
+      "labels": [
+        "tag:PUBLISHED",
+        "confidence:very likely",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--41ad71c1-c030-568a-a397-961e473c0682",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--e22e9074-747d-537e-b392-1dd7e467dc15",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--9095ac88-2cb3-5e40-9d1d-3a5fd32fafdd",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: daeac66441b88ba22806f6617058a2dbf1ea0ddcc6c94f291542ea853ac6f9d3",
+      "description": "TrainingAnnouncement.pdf.lnk",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = 'daeac66441b88ba22806f6617058a2dbf1ea0ddcc6c94f291542ea853ac6f9d3']",
+      "pattern_type": "stix",
+      "valid_from": "2026-06-01T00:00:00Z",
+      "labels": [
+        "tag:PUBLISHED",
+        "confidence:very likely",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--154ceb5c-8af0-5b88-9a35-64aba92c97b0",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--9095ac88-2cb3-5e40-9d1d-3a5fd32fafdd",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--3265489f-b2a7-5ce4-ac38-62549c940051",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "sha256: bf8afbd1c2074c7cd6ff8b86dbe67a57ca5594817e46b24e226b71c4edde7697",
+      "description": "Unidentified file listed by VirusTotal as communicating with maui-cocktailbar.com",
+      "indicator_types": [
+        "anomalous-activity"
+      ],
+      "pattern": "[file:hashes.'SHA-256' = 'bf8afbd1c2074c7cd6ff8b86dbe67a57ca5594817e46b24e226b71c4edde7697']",
+      "pattern_type": "stix",
+      "valid_from": "2026-10-15T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:roughly even chance",
+        "action:hunt"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--3ea35a1b-301f-5a4f-a431-7954288db83f",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--3265489f-b2a7-5ce4-ac38-62549c940051",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--41a937c6-3f43-582c-aa21-18ecbf96954c",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "domain: www.maui-cocktailbar.com",
+      "description": "Hard-coded C2 host in the December and April builds (https://www.maui-cocktailbar.com:443)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[domain-name:value = 'www.maui-cocktailbar.com']",
+      "pattern_type": "stix",
+      "valid_from": "2025-12-26T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:almost certain",
+        "action:hunt-historic"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ],
+      "valid_until": "2026-06-06T23:59:59Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--38696823-1f45-5d1c-8a68-8792126bba08",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--41a937c6-3f43-582c-aa21-18ecbf96954c",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--e1773a63-5c10-563e-8213-30c05fbba038",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "domain: maui-cocktailbar.com",
+      "description": "Re-registered expired small-business domain used for C2 (registered 2025-06-06 03:09 UTC, Namecheap)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[domain-name:value = 'maui-cocktailbar.com']",
+      "pattern_type": "stix",
+      "valid_from": "2025-06-06T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:hunt-historic"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ],
+      "valid_until": "2026-06-06T23:59:59Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--722d7223-56d1-5ad5-b976-b128a70f3515",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--e1773a63-5c10-563e-8213-30c05fbba038",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--95d444c7-fc34-555d-97be-f58cc4b35613",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "domain: mediumser.com",
+      "description": "C2 parent domain (NameSilo, registered 2026-03-20; Cloudflare DNS from 2026-04-29)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[domain-name:value = 'mediumser.com']",
+      "pattern_type": "stix",
+      "valid_from": "2026-03-20T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--02be0dc5-02e0-530e-8d09-6f6f414b81a0",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--95d444c7-fc34-555d-97be-f58cc4b35613",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--69668961-f48d-5940-9404-a6b8107bba8d",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "domain: register.mediumser.com",
+      "description": "C2 host returned by the Worker dead-drop resolvers (June/August builds)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[domain-name:value = 'register.mediumser.com']",
+      "pattern_type": "stix",
+      "valid_from": "2026-05-12T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--913fc34d-0e09-5aee-b4eb-013d8ef4c945",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--69668961-f48d-5940-9404-a6b8107bba8d",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--bccabeb6-2065-5efb-a704-2dd6042ba745",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "domain: appupdate.0cmds20cj2cdf8.workers.dev",
+      "description": "Cloudflare Workers dead-drop resolver (returns the C2 hostname)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[domain-name:value = 'appupdate.0cmds20cj2cdf8.workers.dev']",
+      "pattern_type": "stix",
+      "valid_from": "2026-06-01T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--4ceffe0d-1241-5db0-80a0-0a2ba4860cd5",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--bccabeb6-2065-5efb-a704-2dd6042ba745",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--6889c444-9c2f-5cdb-906e-3f972cc07fa8",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "url: https://appupdate.0cmds20cj2cdf8.workers.dev/A3cmf0q9ASCion",
+      "description": "Dead-drop resolver URL hard-coded in the June/August builds (59-byte string)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[url:value = 'https://appupdate.0cmds20cj2cdf8.workers.dev/A3cmf0q9ASCion']",
+      "pattern_type": "stix",
+      "valid_from": "2026-06-01T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--302eb13c-0d98-5fc7-ad93-dc6df63cc7a3",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--6889c444-9c2f-5cdb-906e-3f972cc07fa8",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--278f12be-4187-5812-b648-0b3e07e10f50",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "domain: regupdate.eamakfu49dc28wa.workers.dev",
+      "description": "Cloudflare Workers dead-drop resolver (returns the C2 hostname)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[domain-name:value = 'regupdate.eamakfu49dc28wa.workers.dev']",
+      "pattern_type": "stix",
+      "valid_from": "2026-06-01T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--3f9f93dd-2dbb-587f-b988-460bdadc6240",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--278f12be-4187-5812-b648-0b3e07e10f50",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--56245a5d-1ea5-55fe-8318-62dd56f30b26",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "url: https://regupdate.eamakfu49dc28wa.workers.dev/vere0zme82cad",
+      "description": "Dead-drop resolver URL hard-coded in the June/August builds (59-byte string)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[url:value = 'https://regupdate.eamakfu49dc28wa.workers.dev/vere0zme82cad']",
+      "pattern_type": "stix",
+      "valid_from": "2026-06-01T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:almost certain",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--7abab724-8ac2-57fc-b75f-c1dd761a5b79",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--56245a5d-1ea5-55fe-8318-62dd56f30b26",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--4125ee9b-d310-564d-8799-7b0bd04cc5f9",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "url: https://www.maui-cocktailbar.com:443",
+      "description": "C2 base URL hard-coded in the December build (also /heartbeat, /result)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[url:value = 'https://www.maui-cocktailbar.com:443']",
+      "pattern_type": "stix",
+      "valid_from": "2025-12-26T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:almost certain",
+        "action:hunt-historic"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ],
+      "valid_until": "2026-06-06T23:59:59Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--681600ff-f80c-5ff7-ae5b-f360537f1633",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--4125ee9b-d310-564d-8799-7b0bd04cc5f9",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--fda95217-3f9c-5e4a-a2fd-f79978b0d7aa",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "ipv4: 38.60.244.92",
+      "description": "C2 for www.maui-cocktailbar.com in December 2025 (LightNode AS154177, Yangon)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[ipv4-addr:value = '38.60.244.92']",
+      "pattern_type": "stix",
+      "valid_from": "2025-12-26T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:very likely",
+        "action:hunt-historic"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ],
+      "valid_until": "2025-12-26T23:59:59Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--fe604126-ed96-50b7-b135-9c9af1fab4ef",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--fda95217-3f9c-5e4a-a2fd-f79978b0d7aa",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--9d75f41b-16ca-5d94-80df-acfbbfe780f8",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "ipv4: 38.60.244.141",
+      "description": "C2 for www.maui-cocktailbar.com and register.mediumser.com (LightNode AS154177, Yangon)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[ipv4-addr:value = '38.60.244.141']",
+      "pattern_type": "stix",
+      "valid_from": "2026-02-07T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:very likely",
+        "action:hunt-historic"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ],
+      "valid_until": "2026-07-06T23:59:59Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--7f267f40-d64f-506e-98a9-baf86cbca95e",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--9d75f41b-16ca-5d94-80df-acfbbfe780f8",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--6aa4570a-4cf1-5cd2-a2b3-d7c2cbe832cb",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "ipv4: 104.64.211.22",
+      "description": "C2 for register.mediumser.com (Akamai/Linode)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[ipv4-addr:value = '104.64.211.22']",
+      "pattern_type": "stix",
+      "valid_from": "2026-07-07T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:likely",
+        "action:hunt-historic"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ],
+      "valid_until": "2026-08-11T23:59:59Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--41783c20-ad6a-5c7f-bd71-f0cae4a87b8b",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--6aa4570a-4cf1-5cd2-a2b3-d7c2cbe832cb",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--5f02fa16-cf1f-5749-a452-6e39275c4778",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "ipv4: 130.94.100.181",
+      "description": "C2 for register.mediumser.com after the Linode period (LightNode AS154177, Yangon)",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "pattern": "[ipv4-addr:value = '130.94.100.181']",
+      "pattern_type": "stix",
+      "valid_from": "2026-08-12T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:very likely",
+        "action:block"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--1ac40795-6f7a-5124-94fb-f35aaf5b048a",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--5f02fa16-cf1f-5749-a452-6e39275c4778",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--1a44d1d8-dbb9-5f73-81fa-5de3f4e9df16",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "ipv4: 27.102.128.147",
+      "description": "maui-cocktailbar.com apex A record 2026-03-13 to 2026-03-17 (DAOU Technology, KR; shared hosting)",
+      "indicator_types": [
+        "anomalous-activity"
+      ],
+      "pattern": "[ipv4-addr:value = '27.102.128.147']",
+      "pattern_type": "stix",
+      "valid_from": "2026-03-13T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:roughly even chance",
+        "action:hunt"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--77d5c0a7-c07e-58e8-8e5b-6dfbad3ffdbc",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--1a44d1d8-dbb9-5f73-81fa-5de3f4e9df16",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--796819e4-304a-5c23-b00d-7f0fd84349b8",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "email: jack.amy2015@atomicmail.io",
+      "description": "Registrant e-mail of mediumser.com",
+      "indicator_types": [
+        "anomalous-activity"
+      ],
+      "pattern": "[email-addr:value = 'jack.amy2015@atomicmail.io']",
+      "pattern_type": "stix",
+      "valid_from": "2026-03-20T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:very likely",
+        "action:pivot"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--5bfadae8-e23a-5d5a-9475-71f97af0cddf",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--796819e4-304a-5c23-b00d-7f0fd84349b8",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--315626ba-11cf-5a48-b61d-fd190ff7e379",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "x509_sha256: dad3fa948af98c55a2029c93999661264c37eb432ef42fdef402326393cfbd0a",
+      "description": "RAT CA (C=US, O=RAT System, CN=RAT CA; ECDSA P-384; serial 1; 2025-12-05 08:17:02 -> 2035-12-03; SKI f2f17b88d28bb8eb18147dd5d39eff47fcdc49f6) - pinned by the `agent` lineage",
+      "indicator_types": [
+        "anomalous-activity"
+      ],
+      "pattern": "[x509-certificate:hashes.'SHA-256' = 'dad3fa948af98c55a2029c93999661264c37eb432ef42fdef402326393cfbd0a']",
+      "pattern_type": "stix",
+      "valid_from": "2025-12-05T00:00:00Z",
+      "labels": [
+        "tag:CORROBORATED",
+        "confidence:almost certain",
+        "action:hunt"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--209aad46-8294-5450-b89b-d1e3d67a7281",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--315626ba-11cf-5a48-b61d-fd190ff7e379",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--9a5cb88d-4d2a-526b-9305-6aa9e62dbf36",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "x509_sha256: 6b348f7ad068f0324fcf0fff6e91437adb5edd8d2301e44cc0888ef2a8fd43ca",
+      "description": "C2 server leaf signed by RAT CA (C=US, O=RAT System, CN=localhost; serial 2; SAN localhost, 127.0.0.1; same validity as the CA to the second)",
+      "indicator_types": [
+        "anomalous-activity"
+      ],
+      "pattern": "[x509-certificate:hashes.'SHA-256' = '6b348f7ad068f0324fcf0fff6e91437adb5edd8d2301e44cc0888ef2a8fd43ca']",
+      "pattern_type": "stix",
+      "valid_from": "2025-12-05T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:very likely",
+        "action:hunt"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--e1ab8d4a-2560-56c2-8e4b-d1950dfc90cb",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--9a5cb88d-4d2a-526b-9305-6aa9e62dbf36",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--850618a4-d1d2-5a67-8ac2-175aec5f5395",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "name": "x509_sha256: 2290c2a6576eb32eb0810e9d67f83ceae2e372f32b44c7438828a25de8679988",
+      "description": "RAT-TeamServer (CN=RAT-TeamServer; RSA-2048; self-signed; serial 3D141BFB016BF3AF419D4127E1C6B2E6; 2025-12-05 05:57:54 -> 2026-12-05 06:07:55) - pinned by the `rat/agent` lineage",
+      "indicator_types": [
+        "anomalous-activity"
+      ],
+      "pattern": "[x509-certificate:hashes.'SHA-256' = '2290c2a6576eb32eb0810e9d67f83ceae2e372f32b44c7438828a25de8679988']",
+      "pattern_type": "stix",
+      "valid_from": "2025-12-05T00:00:00Z",
+      "labels": [
+        "tag:NOVEL",
+        "confidence:almost certain",
+        "action:hunt"
+      ],
+      "object_marking_refs": [
+        "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+      ]
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--7bea2199-be02-568f-985a-29839547cc24",
+      "created": "2026-10-15T00:00:00.000Z",
+      "modified": "2026-10-15T00:00:00.000Z",
+      "created_by_ref": "identity--52b035fd-fbf2-5ef4-bd95-5cf218005802",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--850618a4-d1d2-5a67-8ac2-175aec5f5395",
+      "target_ref": "malware--2f84e1ec-5127-5079-887b-fed1b725671a"
+    }
+  ]
+}

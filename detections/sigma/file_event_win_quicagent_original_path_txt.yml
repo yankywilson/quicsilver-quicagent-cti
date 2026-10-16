@@ -1,0 +1,24 @@
+title: QUICAgent April Build Writes C:\Users\Public\original_path.txt
+id: d0d90671-cb97-4df3-bd5e-f84b292a2ad5
+status: experimental
+description: |
+    The April 2026 QUICAgent build (HolidayNotice.pdf.exe, rat/agent lineage) records its launch path in C:\Users\Public\original_path.txt.
+    Evidence tag: NOVEL (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.defense-evasion
+    - attack.t1564.001
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection:
+        TargetFilename|endswith: '\Users\Public\original_path.txt'
+    condition: selection
+falsepositives:
+    - None known
+level: high

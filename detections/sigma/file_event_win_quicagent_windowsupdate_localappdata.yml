@@ -1,0 +1,24 @@
+title: QUICAgent Payload Written to %LOCALAPPDATA%\Windowsupdate.exe
+id: a480d8fc-6ea3-4e6e-bbec-780597d6f50a
+status: experimental
+description: |
+    QUICSILVER writes the rebuilt QUICAgent implant to the root of %LOCALAPPDATA% as Windowsupdate.exe. Windows Update never places an executable there.
+    Evidence tag: CORROBORATED (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.defense-evasion
+    - attack.t1036.005
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection:
+        TargetFilename|endswith: '\AppData\Local\Windowsupdate.exe'
+    condition: selection
+falsepositives:
+    - None known
+level: high

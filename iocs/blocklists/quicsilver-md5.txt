@@ -1,0 +1,11 @@
+# MD5 of the block-now files in quicsilver-sha256.txt (for tools that only take MD5)
+# Operation QUICSILVER / QUICAgent - TLP:CLEAR - 2026-10-15 - https://github.com/yankywilson/quicsilver-quicagent-cti
+2305b19dec7d91b82c6084b51f0bd9b6
+2a491d3e89169945ba7234ea4a777e95
+4379e277b168ccee3923c1b10ba4dcc3
+4a1a49c0b55d6373ea2d582bd47401f3
+5a91a13e681788ab02354f2fc2f82355
+7f6ed7ab257d4d642d6b25860f1e2c93
+b9622eb982f7c8b9885c932ca54339a0
+dd45d56c026cd2c58cb4237f34ac4307
+ef50056bc653b7f4080d19d8937b1394

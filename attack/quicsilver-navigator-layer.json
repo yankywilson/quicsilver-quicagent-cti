@@ -1,0 +1,610 @@
+{
+  "name": "Operation QUICSILVER / QUICAgent",
+  "versions": {
+    "attack": "19",
+    "navigator": "5.1.0",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "ANCHOR 2026-10-15 - coloured by evidence tag. https://github.com/yankywilson/quicsilver-quicagent-cti",
+  "filters": {
+    "platforms": [
+      "Windows"
+    ]
+  },
+  "sorting": 0,
+  "layout": {
+    "layout": "side",
+    "showID": true,
+    "showName": true
+  },
+  "hideDisabled": false,
+  "techniques": [
+    {
+      "techniqueID": "T1583.001",
+      "tactic": "resource-development",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] Re-registered an expired small-business domain (maui-cocktailbar.com) on 2025-06-06, about six months before first C2 use; registered mediumser.com at NameSilo on 2026-03-20 | source: ANCHOR WHOIS history / Validin / SANS ISC feed; domains published by Seqrite",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "DNS Sigma; Suricata DNS/TLS/QUIC; KQL Q08"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1583.003",
+      "tactic": "resource-development",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] LightNode VPS (AS154177, Yangon) for three of the four actor-held C2 addresses (38.60.244.92, 38.60.244.141, 130.94.100.181); one Linode node (104.64.211.22) | source: ANCHOR passive DNS + ipinfo; 38.60.244.141 and 104.64.211.22 published by Seqrite",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "KQL Q08; hunting/queries"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1583.006",
+      "tactic": "resource-development",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] Two Cloudflare Workers used as dead-drop resolvers (appupdate.0cmds20cj2cdf8 / regupdate.eamakfu49dc28wa .workers.dev) | source: Seqrite; ANCHOR string-table read (correct path /vere0zme82cad)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "Suricata TLS SNI; KQL Q11"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1587.001",
+      "tactic": "resource-development",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] Custom Go backdoor QUICAgent in two code lineages (module agent: Dec 2025 -> Jun/Aug 2026; module rat/agent: Apr 2026) built in one developer environment (Windows user qwe) | source: ANCHOR static RE; family name from Seqrite",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "detections/yara"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1587.003",
+      "tactic": "resource-development",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] Private RAT CA and its localhost server leaf, plus a self-signed RAT-TeamServer certificate - all minted on 2025-12-05 | source: ANCHOR RE + Censys (leaf rebuilt and signature-verified)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "YARA pin rules; hunting/queries"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1566.001",
+      "tactic": "initial-access",
+      "color": "#ffb703",
+      "comment": "[PUBLISHED] VHD lure (TrainingAnnouncement.jpg, ACMECS_Pillar_1.vhd) - delivery e-mail not observed by ANCHOR | source: Seqrite",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "PUBLISHED"
+        },
+        {
+          "name": "detections",
+          "value": "KQL Q10"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1553.005",
+      "tactic": "defense-evasion",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] Payload shipped inside a VHD: files inside a mounted VHD do not carry the parent's Mark-of-the-Web | source: ANCHOR (container forensics); Microsoft documentation on MOTW propagation",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "KQL Q10; harden VHD auto-mount"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1204.002",
+      "tactic": "execution",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] Victim opens ACMECS_Pillar_1.pdf.lnk (PDF icon) or HolidayNotice.pdf.exe | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma proc_creation_win_ftp_*; KQL Q01"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1036.008",
+      "tactic": "defense-evasion",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] VHD renamed TrainingAnnouncement.jpg; payload halves named header.doc / body.doc | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "YARA QUICSILVER_VHD_Lure_Container; Sigma copy-concat"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1036.007",
+      "tactic": "defense-evasion",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] HolidayNotice.pdf.exe; TrainingAnnouncement.pdf.lnk; ACMECS_Pillar_1.pdf.lnk | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "YARA"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1036.005",
+      "tactic": "defense-evasion",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] %LOCALAPPDATA%\\Windowsupdate.exe; Startup\\SystemIn.lnk; C:\\Users\\Public\\Downloads\\SystemPublicCache\\ (December build) | source: ANCHOR (SystemPublicCache); Seqrite (Windowsupdate.exe / SystemIn.lnk)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma file_event_*; KQL Q03/Q05"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1202",
+      "tactic": "defense-evasion",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] LNK runs ftp.exe -s:<script>; the script's '!' lines run cmd.exe | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma proc_creation_win_ftp_*; KQL Q01/Q02"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1059.003",
+      "tactic": "execution",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] copy /Y /b header.doc+body.doc; start; cmd /c ping 127.0.0.1 -n 3 >nul & del /f /q (December) | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma; KQL Q02/Q05"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] create_lnk_<digits>.ps1 builds the Startup shortcut with WScript.Shell, run as powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File; Shell.Application ShellExecute relaunch | source: Seqrite; ANCHOR; Triage 260818-sw2wjadk7v",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma; KQL Q04"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1559.001",
+      "tactic": "execution",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] launchViaCOM (Shell.Application ShellExecute, June/August); runViaCom (WScript.Shell Run, April) | source: ANCHOR static RE",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma proc_creation_win_powershell_shell_application_shellexecute"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "defense-evasion",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] Implant split in two 3,523,328-byte halves | source: Seqrite; ANCHOR (byte-exact reassembly = cd147efe)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "YARA ftp-script rule"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1140",
+      "tactic": "defense-evasion",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] copy /b reassembly of header.doc + body.doc into Windowsupdate.exe | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma proc_creation_win_cmd_copy_concat_doc_to_exe"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1564.001",
+      "tactic": "defense-evasion",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] Nested single-underscore folders on the VHD; attrib +h +s on the December install copy; the April build hides its own file (+H +S) in place when SentinelOne or Trend Micro runs | source: ANCHOR (attrib; April setFileSystemHidden 0x72dbf9); Seqrite (folders)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma proc_creation_win_attrib_hide_systempubliccache; KQL Q05"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1547.001",
+      "tactic": "persistence",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] Startup\\SystemIn.lnk -> Windowsupdate.exe (June/August) | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma file_event_win_quicagent_startup_systemin_lnk; KQL Q04"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1070.004",
+      "tactic": "defense-evasion",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] December build deletes its launch copy after relaunching from SystemPublicCache; April build deletes its original and every *.hta in %USERPROFILE%\\Downloads | source: ANCHOR static RE + Triage 251222-kah8asynej",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma proc_creation_win_cmd_ping_delay_self_delete"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1497.003",
+      "tactic": "defense-evasion",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] June/August builds: random 100-600 ms sleep + 1,000 SHA-256 rounds, then one LazyProc.Call (main.antiDebugObfuscation, 0x140333860); then a vectored exception handler is registered and an exception raised before persistence (likely anti-debug) | source: Seqrite; ANCHOR static RE (0x140333860, 0x140334420)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1518.001",
+      "tactic": "discovery",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] December: tasklist /FO CSV /NH for bdagent.exe (Bitdefender) and sentinelagent.exe (SentinelOne) - either one skips the install. April: go-ps for SentinelAgent.exe / ptsessionagent.exe (Trend Micro) - either one skips the install; bdagent.exe only switches the relaunch from WScript.Shell to cmd /c | source: ANCHOR static RE + Triage",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma proc_creation_win_tasklist_csv_from_user_writable_parent; KQL Q05"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1057",
+      "tactic": "discovery",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] Process list via tasklist (December) or github.com/mitchellh/go-ps (April) | source: ANCHOR static RE",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma tasklist rule"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] collectSystemInfo: hostname / OS / architecture sent as X-Agent-Hostname / X-Agent-OS / X-Agent-Arch | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1033",
+      "tactic": "discovery",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] Current user sent as X-Agent-User | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1083",
+      "tactic": "discovery",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] list_dir task | source: Seqrite; ANCHOR (listDirectory)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1102.001",
+      "tactic": "command-and-control",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] Worker replies carry the C2 host on 'all:' lines; both replies are parsed | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "Suricata; KQL Q11"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1008",
+      "tactic": "command-and-control",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] June/August builds keep a list of server URLs and rotate on failure (rotateServerURL / doRequestWithFailover) | source: ANCHOR static RE",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "KQL Q11"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] HTTP/3 over QUIC (quic-go v0.40.1). Both lineages: /heartbeat and /result. agent: %s/upload?%s, %s/upload/next?%s, %s/download?task_id=. rat/agent: /register and /upload/chunk/pull | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "Sigma network_connection_win_quic_from_quicagent_paths; KQL Q07; YARA QUICSILVER_QUICAgent_C2_Protocol"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1573.002",
+      "tactic": "command-and-control",
+      "color": "#ff4d6d",
+      "comment": "[NOVEL] TLS 1.3 to a server certificate pinned to an embedded private CA (RAT CA) or self-signed RAT-TeamServer | source: ANCHOR (TeamServer pin; December pin); Seqrite (RAT CA in June)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "NOVEL"
+        },
+        {
+          "name": "detections",
+          "value": "YARA pin rules"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1573.001",
+      "tactic": "command-and-control",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] RC4 over the JSON bodies. Keys built on the stack with movabs immediates: MySecretEncryptionKey2025!@#$% (agent) and 2024axcegbaxcegb (rat/agent) | source: Seqrite (agent key); ANCHOR static RE (stack build; rat/agent key NOVEL)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "YARA QUICSILVER_QUICAgent_RC4_Key_Builder"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] download task | source: Seqrite; ANCHOR (downloadFile)",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "color": "#4cc9f0",
+      "comment": "[CORROBORATED] Chunked upload task (requestNextUploadChunk / postUploadChunk / cancelRemoteUpload) | source: Seqrite; ANCHOR",
+      "enabled": true,
+      "metadata": [
+        {
+          "name": "tag",
+          "value": "CORROBORATED"
+        },
+        {
+          "name": "detections",
+          "value": "-"
+        }
+      ]
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#ffffff",
+      "#ff4d6d"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  },
+  "legendItems": [
+    {
+      "label": "NOVEL - first-hand ANCHOR",
+      "color": "#ff4d6d"
+    },
+    {
+      "label": "CORROBORATED - published and confirmed",
+      "color": "#4cc9f0"
+    },
+    {
+      "label": "PUBLISHED - vendor claim cited",
+      "color": "#ffb703"
+    }
+  ],
+  "showTacticRowBackground": true,
+  "tacticRowBackground": "#1f2630",
+  "selectTechniquesAcrossTactics": true
+}

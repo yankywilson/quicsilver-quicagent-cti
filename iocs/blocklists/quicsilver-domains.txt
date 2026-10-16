@@ -1,0 +1,6 @@
+# Domains safe to block now (actor-only). Time-bound domains are in quicsilver-timebound.csv
+# Operation QUICSILVER / QUICAgent - TLP:CLEAR - 2026-10-15 - https://github.com/yankywilson/quicsilver-quicagent-cti
+appupdate.0cmds20cj2cdf8.workers.dev
+mediumser.com
+register.mediumser.com
+regupdate.eamakfu49dc28wa.workers.dev

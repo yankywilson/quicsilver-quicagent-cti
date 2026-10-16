@@ -1,0 +1,32 @@
+title: Tasklist CSV Enumeration Started From a Public or Temp Folder Binary
+id: ba144080-3ab6-4486-a410-4fd9a29f0e67
+status: experimental
+description: |
+    The December QUICAgent build runs 'tasklist /FO CSV /NH' twice per start to look for bdagent.exe (Bitdefender) and sentinelagent.exe (SentinelOne).
+    Evidence tag: NOVEL (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.discovery
+    - attack.t1518.001
+    - attack.t1057
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith: '\tasklist.exe'
+        CommandLine|contains|all:
+            - '/FO CSV'
+            - '/NH'
+    selection_parent:
+        ParentImage|contains:
+            - '\Users\Public\'
+            - '\AppData\Local\Temp\'
+    condition: all of selection*
+falsepositives:
+    - Installers and monitoring scripts staged in Temp (baseline first)
+level: medium

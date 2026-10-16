@@ -1,0 +1,8 @@
+sandbox,analysis_id,run_date_utc,duration_s,sha256,c2_name,c2_ip,client_quic_packets,client_bytes,server_packets,notes
+triage,251222-kah8asynej,2025-12-26,150,2655c0161601b009d2022e02e2c1860a884638c91159e9c9f99fc472445bfc63,www.maui-cocktailbar.com,38.60.244.92,135,172.8 kB,0,run date from Microsoft server Date headers; submitted 2025-12-22
+triage,260415-d3xg3ad14q,2026-04-15,150,c4b4647795567ab15528edd1ab1bf37fb50e21b442e59a653051061973e87c02,www.maui-cocktailbar.com,38.60.244.141,135,172.8 kB,0,
+triage,260814-zaebnshl2y,2026-08-14,300,c15aead19e0d6e8ed51de79a858d7ef6b5ede226c7db79e7008a23b3445c164d,register.mediumser.com (via Workers),130.94.100.181,270,345.6 kB,0,
+triage,260815-yx3r4stvdy,2026-08-15,900,c15aead19e0d6e8ed51de79a858d7ef6b5ede226c7db79e7008a23b3445c164d,register.mediumser.com (via Workers),130.94.100.181,801,1.0 MB,0,"re-run of the August respin, submitted 15 Aug 20:10 UTC: Workers still served the C2 name; no server packets listed"
+triage,260818-sw2wjadk7v,2026-08-18,300,836fa2c799b0b7c2ab683055d880674a2cfe95dc6e47b0650f9f8e0dcb43f858,(Workers only - no C2 lookup),,,,,"ACMECS LNK (behavioral31): ftp.exe chain confirmed; Windowsupdate.exe fetched both Workers over TCP/443 and never resolved a C2 name (submitted 15:29 UTC; reply content not visible) - the Workers likely stopped serving the name between 15 Aug 20:10 and 18 Aug ~15:29"
+triage,260918-gy8w3sbl7v,2026-09-18,,cd147efe37003399e174951927e5fe727a4481756b116f0204a14a64cc62b059,(Workers only),,,,,TCP/443 to both Workers; no C2 follow-up
+joe,1987362,2026-10-15,362,cd147efe37003399e174951927e5fe727a4481756b116f0204a14a64cc62b059,(Workers: error code 1042),,,,,implant built https://error code: 1042error code: 1042:443/heartbeat

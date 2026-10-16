@@ -1,0 +1,15 @@
+# Analysis tools
+cryptography>=42
+pefile>=2023.2.7
+dissect.hypervisor>=3.10
+dissect.volume>=3.10
+dissect.fat>=3.8
+# Validation (tests/)
+yara-python>=4.5
+pysigma>=0.11
+pysigma-backend-kusto>=0.4
+pysigma-backend-splunk>=1.1
+stix2>=3.0
+stix2-patterns>=2.0
+suricataparser>=1.0
+PyYAML>=6.0

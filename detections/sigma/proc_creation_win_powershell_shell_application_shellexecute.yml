@@ -1,0 +1,35 @@
+title: PowerShell Starts a Program Through Shell.Application ShellExecute
+id: 108e0fbe-62e2-4b95-b524-555a61f2bb35
+status: experimental
+description: |
+    QUICAgent's launchViaCOM runs "$shell = New-Object -ComObject Shell.Application; $shell.ShellExecute('<path>')" so the implant is re-parented under explorer.exe.
+    Evidence tag: NOVEL (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.execution
+    - attack.t1559.001
+    - attack.t1059.001
+    - attack.defense-evasion
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Image|endswith:
+            - '\powershell.exe'
+            - '\pwsh.exe'
+        - OriginalFileName:
+            - 'PowerShell.EXE'
+            - 'pwsh.dll'
+    selection_cli:
+        CommandLine|contains|all:
+            - 'Shell.Application'
+            - 'ShellExecute('
+    condition: all of selection_*
+falsepositives:
+    - Admin scripts that elevate through ShellExecute (usually with 'runas')
+level: medium

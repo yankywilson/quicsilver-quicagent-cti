@@ -1,0 +1,19 @@
+indicator,type,tag,why_excluded,date_checked,source,what_to_do_instead
+3.22.233.21,ipv4,EXCLUDED,"Matched Shodan ssl:""RAT System"" only through the hostname rat-system.ddns.net - a substring collision, not the RAT CA. FOFA/Validin showed nothing linking it to QUICAgent.",2026-10-14,"ANCHOR (Shodan, FOFA, Validin)","Use the issuer field: Shodan ssl.cert.issuer.cn:""RAT CA"""
+rat-system.ddns.net,domain,EXCLUDED,"Dynamic-DNS name that caused the false positive above. No certificate, hash or timing link.",2026-10-14,ANCHOR (Validin),Ignore
+172.234.24.211,ipv4,EXCLUDED,Registrar parking for maui-cocktailbar.com after it expired (16-30 Jun 2026); June 2026 certificates belong to the parking service.,2026-10-14,"ANCHOR (Validin, VirusTotal, CT)",Do not use June-2026 maui-cocktailbar.com resolutions as actor infrastructure
+172.239.57.117,ipv4,EXCLUDED,Same parking service as 172.234.24.211.,2026-10-14,"ANCHOR (Validin, VirusTotal)",Ignore
+198.54.117.197,ipv4,EXCLUDED,Namecheap parking / forwarding range (198.54.117.197-.200) seen for the apex.,2026-10-14,ANCHOR (VirusTotal resolutions),Ignore
+198.54.117.198,ipv4,EXCLUDED,Namecheap parking / forwarding range.,2026-10-14,ANCHOR (VirusTotal resolutions),Ignore
+198.54.117.199,ipv4,EXCLUDED,Namecheap parking / forwarding range.,2026-10-14,ANCHOR (VirusTotal resolutions),Ignore
+198.54.117.200,ipv4,EXCLUDED,Namecheap parking / forwarding range.,2026-10-14,ANCHOR (VirusTotal resolutions),Ignore
+192.64.119.129,ipv4,EXCLUDED,Namecheap parking / forwarding.,2026-10-14,ANCHOR (VirusTotal resolutions),Ignore
+192.64.119.47,ipv4,EXCLUDED,Namecheap parking / forwarding.,2026-10-14,ANCHOR (VirusTotal resolutions),Ignore
+149.210.210.187,ipv4,EXCLUDED,Shared Dutch hosting from the domain's legitimate pre-2021 life; OTX shows unrelated co-hosted sites.,2026-10-14,"ANCHOR (OTX passive DNS, VirusTotal)",Ignore
+80.69.67.46,ipv4,EXCLUDED,Shared Dutch hosting from the domain's legitimate life; unrelated co-hosted sites.,2026-10-14,"ANCHOR (OTX passive DNS, VirusTotal)",Ignore
+34.41.139.193,ipv4,EXCLUDED,"Post-expiry third-party hosting of maui-cocktailbar.com (aftermarket lander / later registrant), not actor.",2026-10-14,"ANCHOR (VirusTotal resolutions, WHOIS history)",Ignore
+216.227.142.171,ipv4,EXCLUDED,"Post-expiry third-party hosting of maui-cocktailbar.com, not actor.",2026-10-14,"ANCHOR (VirusTotal resolutions, WHOIS history)",Ignore
+maui-cocktailbar.com (after 2026-06-06),domain window,EXCLUDED,"Expired ~6-8 Jun 2026, parked, sold on an aftermarket lander, deleted 18-19 Aug, re-registered 29 Sep 2026 by an unrelated party.",2026-10-15,"ANCHOR (WHOIS history, Validin, Malwarebytes domain age 15 days)",Time-bound every match to 2025-12-22..2026-06-06
+104.64.211.22 (after 2026-08-11),ipv4 window,EXCLUDED,Now hosts an unrelated workload; scanning data after the actor left describes a bystander.,2026-10-14,"ANCHOR (Censys, Validin)",Hunt only inside 2026-07-07..2026-08-11; do not probe or publish its current services
+https://regupdate.eamakfu49dc28wa.workers.dev/vere0zme82cadre,url,EXCLUDED,"Mis-transcribed by Seqrite and copied by SOCRadar, HivePro and cybersecuritynews. The implant requests /vere0zme82cad.",2026-10-15,ANCHOR (string-table read of cd147efe),"Block the host, or the correct path"
+"Bulk-feed family tags (cobalt-strike, coinminer, dosia, frostygoop, glassworm, luca-stealer, poet-rat, quasar-rat, sliver, snatch)",vendor label,EXCLUDED,Filename tags on 2655c016 (2025-12-22) and cd147efe (2026-09-17) in a bulk sample feed; mutually incompatible families. SOP Rule 4.,2026-10-15,Triage 251222-kah8asynej; Triage 260918-gy8w3sbl7v; Joe Sandbox 1987362,Ignore the labels; the samples are QUICAgent

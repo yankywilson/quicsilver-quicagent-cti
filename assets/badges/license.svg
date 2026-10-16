@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="149" height="20" role="img" aria-label="license: defensive use">
+  <title>license: defensive use</title>
+  <clipPath id="c"><rect width="149" height="20" rx="3"/></clipPath>
+  <g clip-path="url(#c)">
+    <rect width="56" height="20" fill="#1f2630"/>
+    <rect x="56" width="93" height="20" fill="#6e7781"/>
+  </g>
+  <g font-family="Verdana,Geneva,'DejaVu Sans',sans-serif" font-size="11" text-anchor="middle">
+    <text x="28" y="14" fill="#e6edf3" textLength="42" lengthAdjust="spacingAndGlyphs">license</text>
+    <text x="102.5" y="14" fill="#ffffff" textLength="79" lengthAdjust="spacingAndGlyphs">defensive use</text>
+  </g>
+</svg>

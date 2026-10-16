@@ -1,0 +1,136 @@
+``` =====================================================================================================
+    Operation QUICSILVER / QUICAgent - Splunk hunting pack (Sysmon)
+    ANCHOR | TLP:CLEAR | 2026-10-15 | https://github.com/yankywilson/quicsilver-quicagent-cti
+
+    Field names follow the Splunk Add-on for Sysmon (XmlWinEventLog). The searches use one macro so you
+    only adapt the index/source once. Create it in Settings > Advanced search > Search macros (or macros.conf):
+
+        [sysmon]
+        definition = (index=* source="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational")
+
+    Sysmon event IDs used: 1 process create, 3 network connection (UDP included), 11 file create, 22 DNS query,
+    23/26 file delete (S06 only - needs a FileDelete rule in your Sysmon config).
+    Each block below is one search: copy from its header to the next header. Widen the time picker to
+    -330d for retro-hunts: the operation ran from December 2025 to August 2026.
+===================================================================================================== ```
+
+
+``` S01  ftp.exe running a local command script (-s) - the QUICSILVER / GriefLure LNK loader ```
+`sysmon` EventCode=1 (Image="*\\ftp.exe" OR OriginalFileName="ftp.exe")
+| regex CommandLine="(?i)\s[-/]s(\"\"|:)"
+| eval exact_template=if(like(CommandLine, "%_/_/j/%") OR like(CommandLine, "%_\\_\\j\\%"), "yes", "no")
+| eval from_shell=if(like(lower(ParentImage), "%\\explorer.exe"), "yes", "no")
+| table _time Computer User CommandLine exact_template from_shell ParentImage ParentCommandLine
+| sort - _time
+
+
+``` S02  ftp.exe -> cmd.exe joining two .doc files into an EXE (split-payload rebuild) ```
+`sysmon` EventCode=1 Image="*\\cmd.exe" CommandLine="*copy*" CommandLine="*/b*" CommandLine="*.doc+*" CommandLine="*.exe*"
+| eval parent_is_ftp=if(like(lower(ParentImage), "%\\ftp.exe"), "yes", "no")
+| table _time Computer User CommandLine parent_is_ftp ParentImage
+| sort - _time
+
+
+``` S03  Windowsupdate.exe in the root of %LOCALAPPDATA% (QUICAgent drop + start) ```
+`sysmon` (EventCode=1 OR EventCode=11)
+| eval path=coalesce(Image, TargetFilename)
+| regex path="(?i)\\\\Users\\\\[^\\\\]+\\\\AppData\\\\Local\\\\Windowsupdate\.exe$"
+| eval evidence=if(EventCode=1, "process started", "file written")
+| table _time Computer User evidence path Hashes ParentImage ParentCommandLine
+| sort - _time
+
+
+``` S04  QUICAgent persistence (June / August builds): create_lnk_*.ps1, Startup\SystemIn.lnk, Shell.Application ```
+`sysmon` ((EventCode=11 (TargetFilename="*\\Start Menu\\Programs\\Startup\\SystemIn.lnk" OR TargetFilename="*\\create_lnk_*.ps1"))
+    OR (EventCode=1 (Image="*\\powershell.exe" OR Image="*\\pwsh.exe")
+        (CommandLine="*create_lnk_*" OR (CommandLine="*Shell.Application*" CommandLine="*ShellExecute(*"))))
+| eval evidence=coalesce(TargetFilename, CommandLine)
+| table _time Computer User EventCode evidence Image ParentImage
+| sort - _time
+
+
+``` S05  December 2025 build: EDR check, self-install to SystemPublicCache, attrib, self-delete ```
+`sysmon` ((EventCode=11 TargetFilename="*\\Users\\Public\\Downloads\\SystemPublicCache\\*")
+    OR (EventCode=1 Image="*\\attrib.exe" CommandLine="*\\Users\\Public\\Downloads\\SystemPublicCache\\*")
+    OR (EventCode=1 ParentImage="*\\Users\\Public\\Downloads\\SystemPublicCache\\*")
+    OR (EventCode=1 Image="*\\tasklist.exe" CommandLine="*/FO CSV*" CommandLine="*/NH*" (ParentImage="*\\Users\\Public\\*" OR ParentImage="*\\AppData\\Local\\Temp\\*"))
+    OR (EventCode=1 Image="*\\cmd.exe" CommandLine="*ping 127.0.0.1 -n 3*" CommandLine="*del /f /q*"))
+| eval evidence=coalesce(TargetFilename, CommandLine)
+| table _time Computer User EventCode Image evidence ParentImage
+| sort - _time
+
+
+``` S06  April 2026 build (HolidayNotice.pdf.exe, rat/agent lineage): C:\Users\Public\original_path.txt,
+         plus deletion of *.hta files in Downloads (Sysmon 23/26 need a FileDelete rule in your config) ```
+`sysmon` ((EventCode=11 TargetFilename="C:\\Users\\Public\\original_path.txt")
+          OR ((EventCode=23 OR EventCode=26) TargetFilename="*\\Downloads\\*.hta"
+              NOT (Image="*\\explorer.exe" OR Image="*\\mshta.exe" OR Image="*\\MsMpEng.exe")))
+| eval evidence=if(match(TargetFilename, "(?i)original_path\.txt$"), "original_path.txt", "hta deleted from Downloads")
+| table _time Computer User Image TargetFilename evidence
+| sort - _time
+
+
+``` S07  QUIC (UDP/443) from a binary in a user-writable folder (generic QUICAgent-class hunt; baseline first) ```
+`sysmon` EventCode=3 Protocol=udp DestinationPort=443 Initiated=true
+    (Image="*\\AppData\\Local\\*" OR Image="*\\AppData\\Roaming\\*" OR Image="*\\Users\\Public\\*" OR Image="*\\ProgramData\\*" OR Image="*\\Temp\\*")
+    NOT (Image="*\\chrome.exe" OR Image="*\\msedge.exe" OR Image="*\\firefox.exe" OR Image="*\\brave.exe" OR Image="*\\opera.exe"
+         OR Image="*\\msedgewebview2.exe" OR Image="*\\ms-teams.exe" OR Image="*\\Teams.exe" OR Image="*\\Zoom.exe" OR Image="*\\Discord.exe")
+| stats count AS flows min(_time) AS first max(_time) AS last values(DestinationIp) AS dest_ips BY Computer Image
+| convert ctime(first) ctime(last)
+| sort - flows
+
+
+``` S08  Network indicators with their date windows (several now belong to someone else) ```
+`sysmon` ((EventCode=22 (QueryName="*appupdate.0cmds20cj2cdf8.workers.dev" OR QueryName="*regupdate.eamakfu49dc28wa.workers.dev"
+                       OR QueryName="*mediumser.com" OR QueryName="www.maui-cocktailbar.com"))
+    OR (EventCode=3 (DestinationIp="38.60.244.92" OR DestinationIp="38.60.244.141" OR DestinationIp="104.64.211.22" OR DestinationIp="130.94.100.181")))
+| eval indicator=coalesce(QueryName, DestinationIp)
+| eval in_window=case(
+    indicator="www.maui-cocktailbar.com", if(_time>=strptime("2025-12-22","%Y-%m-%d") AND _time<strptime("2026-06-07","%Y-%m-%d"), "yes", "NO - not actor"),
+    indicator="38.60.244.92",   if(_time>=strptime("2025-12-01","%Y-%m-%d") AND _time<strptime("2026-02-07","%Y-%m-%d"), "yes", "outside"),
+    indicator="38.60.244.141",  if(_time>=strptime("2026-02-01","%Y-%m-%d") AND _time<strptime("2026-07-07","%Y-%m-%d"), "yes", "outside"),
+    indicator="104.64.211.22",  if(_time>=strptime("2026-07-07","%Y-%m-%d") AND _time<strptime("2026-08-12","%Y-%m-%d"), "yes", "NO - bystander"),
+    indicator="130.94.100.181", if(_time>=strptime("2026-08-12","%Y-%m-%d") AND _time<strptime("2026-08-19","%Y-%m-%d"), "yes", "outside"),
+    true(), "always")
+| table _time Computer User Image indicator in_window DestinationPort Protocol
+| sort - _time
+
+
+``` S09  Known files by hash (Sysmon Hashes field: SHA256= or SHA1= or MD5=) ```
+`sysmon` (EventCode=1 OR EventCode=7 OR EventCode=15 OR EventCode=29)
+    (Hashes="*2655C0161601B009D2022E02E2C1860A884638C91159E9C9F99FC472445BFC63*"
+     OR Hashes="*C4B4647795567AB15528EDD1AB1BF37FB50E21B442E59A653051061973E87C02*"
+     OR Hashes="*CD147EFE37003399E174951927E5FE727A4481756B116F0204A14A64CC62B059*"
+     OR Hashes="*C15AEAD19E0D6E8ED51DE79A858D7EF6B5EDE226C7DB79E7008A23B3445C164D*"
+     OR Hashes="*12A0FAC63096362D941313079C79DDA3681716E6*" OR Hashes="*C06B90B06CAF4E2E8D9EEEF84C34CA84A2F40FA7*"
+     OR Hashes="*7A6AD756256F1226E96EAC775C56BCD6A37F6378*" OR Hashes="*596E22EB9B8E29F7DA1AE46652847E9DD849625E*"
+     OR Hashes="*EF50056BC653B7F4080D19D8937B1394*" OR Hashes="*B9622EB982F7C8B9885C932CA54339A0*"
+     OR Hashes="*2A491D3E89169945BA7234EA4A777E95*" OR Hashes="*4379E277B168CCEE3923C1B10BA4DCC3*")
+| table _time Computer User EventCode Image Hashes ParentImage
+| sort - _time
+
+
+``` S10  Mounted VHD -> ftp.exe within 30 minutes on the same host (delivery chain) ```
+`sysmon` ((EventCode=11 (TargetFilename="*.vhd" OR TargetFilename="*.vhdx" OR TargetFilename="*.jpg")
+          (TargetFilename="*\\Downloads\\*" OR TargetFilename="*\\Content.Outlook\\*" OR TargetFilename="*\\AppData\\Local\\Temp\\*"))
+    OR (EventCode=1 Image="*\\ftp.exe" CommandLine="*-s*"))
+| eval vhd_time=if(EventCode=11, _time, null()), ftp_time=if(EventCode=1, _time, null())
+| eval vhd_file=if(EventCode=11, TargetFilename, null()), ftp_cmd=if(EventCode=1, CommandLine, null())
+| stats min(vhd_time) AS vhd_time max(ftp_time) AS ftp_time values(vhd_file) AS vhd_file values(ftp_cmd) AS ftp_cmd BY Computer
+| where isnotnull(vhd_time) AND isnotnull(ftp_time) AND ftp_time>=vhd_time AND ftp_time-vhd_time<=1800
+| convert ctime(vhd_time) ctime(ftp_time)
+
+
+``` S11  Dead-drop then QUIC: non-browser process queries *.workers.dev, then sends UDP/443 within 5 minutes ```
+`sysmon` ((EventCode=22 QueryName="*.workers.dev") OR (EventCode=3 Protocol=udp DestinationPort=443 Initiated=true))
+    NOT (Image="*\\chrome.exe" OR Image="*\\msedge.exe" OR Image="*\\firefox.exe" OR Image="*\\brave.exe" OR Image="*\\msedgewebview2.exe")
+| eval worker_time=if(EventCode=22, _time, null()), quic_time=if(EventCode=3, _time, null())
+| stats min(worker_time) AS worker_time max(quic_time) AS quic_time values(QueryName) AS workers values(DestinationIp) AS quic_ips BY Computer Image ProcessGuid
+| where isnotnull(worker_time) AND isnotnull(quic_time) AND quic_time>=worker_time AND quic_time-worker_time<=300
+| convert ctime(worker_time) ctime(quic_time)
+
+
+``` S12  Child processes of a QUICAgent install path (operator shell tasks, attrib, tasklist) ```
+`sysmon` EventCode=1 (ParentImage="*\\AppData\\Local\\Windowsupdate.exe" OR ParentImage="*\\Users\\Public\\Downloads\\SystemPublicCache\\*")
+| table _time Computer User ParentImage Image CommandLine
+| sort - _time

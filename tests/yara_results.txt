@@ -1,0 +1,14 @@
+2655c016 Dec build                       QUICSILVER_QUICAgent_RAT_CA_Pin, QUICSILVER_QUICAgent_C2_Protocol, QUICSILVER_QUICAgent_RC4_Key_Builder, QUICSILVER_QUICAgent_December_Installer, QUICSILVER_QUICAgent_Builder_Paths
+c4b46477 April build                     QUICSILVER_QUICAgent_RAT_TeamServer_Pin, QUICSILVER_QUICAgent_C2_Protocol, QUICSILVER_QUICAgent_RC4_Key_Builder, QUICSILVER_QUICAgent_April_Installer, QUICSILVER_QUICAgent_Builder_Paths
+cd147efe June build                      QUICSILVER_QUICAgent_RAT_CA_Pin, QUICSILVER_QUICAgent_C2_Protocol, QUICSILVER_QUICAgent_RC4_Key_Builder, QUICSILVER_QUICAgent_Worker_Resolver
+c15aead1 Aug respin                      QUICSILVER_QUICAgent_RAT_CA_Pin, QUICSILVER_QUICAgent_C2_Protocol, QUICSILVER_QUICAgent_RC4_Key_Builder, QUICSILVER_QUICAgent_Worker_Resolver
+0803521a ACMECS VHD                      QUICSILVER_QUICAgent_RAT_CA_Pin, QUICSILVER_QUICAgent_RC4_Key_Builder, QUICSILVER_QUICAgent_Worker_Resolver, QUICSILVER_VHD_Lure_Container
+836fa2c7 LNK                             QUICSILVER_LNK_FTP_Script_Loader
+5328c3c3 ftp script                      QUICSILVER_FTP_Script_Split_Payload
+4a1a1b14 header.doc                      QUICSILVER_QUICAgent_RAT_CA_Pin, QUICSILVER_QUICAgent_RC4_Key_Builder
+aeff3994 body.doc                        QUICSILVER_QUICAgent_Worker_Resolver
+b1fd6a1c old header.doc (partial)        (no match)
+95b5524b decoy PDF                       (no match)
+
+Negative corpus: 2,837 files (/usr/bin, system .so, Go toolchain, benign Go windowsgui PE) -> 0 matches
+11 of 11 expectations met (2026-10-15)

@@ -1,0 +1,24 @@
+Copyright (c) 2026 Colonel Yanky Wilson / ANCHOR
+
+TLP:CLEAR. This repository contains DEFENSIVE detection content and threat
+intelligence only (no malware, no live payloads, no plaintext credentials).
+
+Permission is granted to use, copy, modify, and distribute this material for
+defensive security purposes, subject to the following:
+
+1. Keep the evidence tags (NOVEL / CORROBORATED / PUBLISHED / EXCLUDED) and the
+   ICD-203 likelihood and confidence wording with any analytical claim you
+   redistribute. They are part of the content, not decoration.
+
+2. Do not present a finding held at "roughly even chance" or below, a finding
+   held with low confidence, or any EXCLUDED item, as established fact.
+
+3. Keep the corrections log (docs/09-methodology-and-corrections.md) in any
+   redistribution that includes the analytical write-ups.
+
+4. Do not add victim data, credentials, or the content of withheld files to
+   derivative works that claim this lineage.
+
+Provided "as is", without warranty of any kind. Validate all detection logic
+against your own environment before production use. Indicators are
+point-in-time: respect their date windows.

@@ -1,0 +1,29 @@
+title: QUIC (UDP/443) From a QUICAgent Install Path
+id: 849ef0c0-fa29-46d3-b7df-c4c6e148155f
+status: experimental
+description: |
+    QUICAgent talks HTTP/3 over QUIC (UDP/443) from %LOCALAPPDATA%\Windowsupdate.exe or the Public Downloads SystemPublicCache folder. Proxies that only inspect TCP do not see it.
+    Evidence tag: NOVEL (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.command-and-control
+    - attack.t1071.001
+    - attack.t1573.002
+logsource:
+    category: network_connection
+    product: windows
+detection:
+    selection_net:
+        Protocol: 'udp'
+        DestinationPort: 443
+    selection_img:
+        - Image|endswith: '\AppData\Local\Windowsupdate.exe'
+        - Image|contains: '\Users\Public\Downloads\SystemPublicCache\'
+    condition: all of selection_*
+falsepositives:
+    - None known
+level: high

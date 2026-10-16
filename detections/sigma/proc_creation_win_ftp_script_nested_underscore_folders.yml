@@ -1,0 +1,28 @@
+title: FTP.EXE Script Path Inside Nested Underscore Folders - QUICSILVER
+id: c58167c5-b447-43dc-af3e-79a08d664d44
+status: experimental
+description: |
+    Detects the exact QUICSILVER/GriefLure template: ftp.exe -s pointing at a script buried in single-underscore folders (e.g. _/_/j/_/_/_/_/_/_).
+    Evidence tag: CORROBORATED (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.defense-evasion
+    - attack.t1202
+    - attack.t1564.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith: '\ftp.exe'
+        CommandLine|contains:
+            - '_/_/j/'
+            - '_\_\j\'
+    condition: selection
+falsepositives:
+    - None known
+level: critical

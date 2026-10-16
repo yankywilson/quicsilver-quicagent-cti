@@ -1,0 +1,27 @@
+title: QUICAgent Temporary Shortcut Builder Script create_lnk_*.ps1
+id: 9f9a29d9-4f26-4dfa-b6bf-3ac0d205f436
+status: experimental
+description: |
+    QUICAgent writes a temporary PowerShell script named create_lnk_<random>.ps1 that builds its Startup shortcut with WScript.Shell.
+    Evidence tag: CORROBORATED (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.execution
+    - attack.t1059.001
+    - attack.persistence
+    - attack.t1547.001
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection:
+        TargetFilename|contains: '\create_lnk_'
+        TargetFilename|endswith: '.ps1'
+    condition: selection
+falsepositives:
+    - Unknown; the name is specific
+level: high

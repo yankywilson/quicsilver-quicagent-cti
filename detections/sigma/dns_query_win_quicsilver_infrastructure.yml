@@ -1,0 +1,31 @@
+title: DNS Query for QUICSILVER Infrastructure
+id: 4c4dd4ec-ad39-4f42-84ca-19fa5288a495
+status: experimental
+description: |
+    Lookups of the QUICAgent dead-drop resolvers and C2 hosts. Time-bound: www.maui-cocktailbar.com belongs to an unrelated party since 2026-09-29.
+    Evidence tag: CORROBORATED (see docs/09-methodology-and-corrections.md).
+references:
+    - https://github.com/yankywilson/quicsilver-quicagent-cti
+    - https://www.seqrite.com/blog/operation-quicsilver-china-nexus-actor-targets-myanmar-diplomats-via-vhd-delivered-go-backdoor/
+author: ANCHOR / Colonel Yanky Wilson
+date: 2026-10-15
+tags:
+    - attack.command-and-control
+    - attack.t1102.001
+    - attack.t1071.001
+logsource:
+    category: dns_query
+    product: windows
+detection:
+    selection:
+        QueryName|endswith:
+            - 'appupdate.0cmds20cj2cdf8.workers.dev'
+            - 'regupdate.eamakfu49dc28wa.workers.dev'
+            - '0cmds20cj2cdf8.workers.dev'
+            - 'eamakfu49dc28wa.workers.dev'
+            - 'mediumser.com'
+            - 'www.maui-cocktailbar.com'
+    condition: selection
+falsepositives:
+    - www.maui-cocktailbar.com after 2026-09-29 (new owner)
+level: high

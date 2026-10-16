@@ -1,0 +1,6 @@
+indicator,type,role,tag,first_seen,source,notes
+a9547e381f04befbf291b3dc2f928d27a88761923c6a0e113b0f721e5b279ab8,sha256,"RAR 18082026_1106_21042026_PL8_Ho so bang chung KH Dung thu thap.rar (Vietnamese, Viettel-themed)",NOVEL,2026-08-18,Triage 260818-m7n6xsssdx,Same _/_/j/_rels/ layout and 48-B header.doc as GriefLure
+35af2cf5494181920b8624c7b719d39590e2a5ff5eaa1a2fa1ba86b2b5aa9b43,sha256,LNK inside the RAR,NOVEL,2026-08-18,Triage 260818-m7n6xsssdx,Tracker block not yet compared with desktop-stv6gg (open lead)
+cc36eb25769c923abf92ffe05d0596ee4ec822ff13cbb6f63ed91417e1dcf4f5,sha256,_/_/j/_rels/header.doc (48 B),NOVEL,2026-08-18,Triage 260818-m7n6xsssdx,
+90740023f0b7de47149dd0041291ef12a64fa4d8aff867e0854e59df54b0fafb,sha256,_/_/j/doc/1.pdf decoy,NOVEL,2026-08-18,Triage 260818-m7n6xsssdx,
+whatsappcenter.com,domain,GriefLure C2 (May 2026),PUBLISHED,2026-05-07,"Seqrite (GriefLure, May 2026); ThreatFox",Last seen by OTX 2026-05-12
